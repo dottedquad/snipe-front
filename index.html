@@ -1,0 +1,55 @@
+<html>
+<head>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript">
+    $.ajaxSetup({
+	    timeout: 20000,
+	    retryAfter:250
+	});
+
+    function getsnipes(){
+        alert('json');
+         $.get("http://c3po:3647/snipes",
+         	function(data) {
+         		$("#snipes").empty();
+         		data.forEach(function(element) {
+         			$("#snipes").append("<div id=\"" + element.auctionId + "\" />");
+         			$.ajax({
+         				method: "GET",
+         				url: "http://c3po:3647/auction/" + element.auctionId,
+         				async: false,
+         				success: function(data) {
+         					$("#" + element.auctionId).append("<table><tr><td rowspan=2><img src=\"" + data.thumbnailUrl + "\" width=100px /></td><th colspan=2><a href=\"http://www.ebay.com/itm/" + element.auctionId + "\">" + data.title + "</a></th></tr><tr><td>Snipe For " + element.bid + "</td><td>Current Bid " + data.currentBid + "</td></tr></table>");
+         				}});
+         		});
+            	alert(String(data));
+            });
+    }
+
+    //$('#ajax').click(function(){
+    //    alert('ajax');
+    //     $.ajax({
+    //         type: "GET",
+    //         dataType: "json",
+    //         url: "http://localhost:8080/restws/json/product/get",
+    //         success: function(data){
+    //            alert(data);
+    //         }
+    //     });
+    //});
+
+    </script>
+</head>
+
+<body>
+	<h1>Search for Ebay Auction</h1>
+	<input type="text" \>
+	<button id="json">Search</button>
+	<hr \>
+	<h1>Current Snipes</h1>
+	<button id="getsnipes" onclick="getsnipes()">Refresh</button>
+	<div id="snipes">sdfsdfsdfsdfsdf</div>
+
+</body>
+
+</html>
